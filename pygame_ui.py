@@ -73,6 +73,8 @@ def main():
     game_running = True
     screen = pygame.display.set_mode(GAME_SCREEN_SIZE)
 
+    pygame.key.set_repeat(350, 80)
+
     ###########################################################################
     ####   Graphics                                                       #####
     ###########################################################################
