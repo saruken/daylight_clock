@@ -73,9 +73,9 @@ def main():
     game_running = True
     screen = pygame.display.set_mode(GAME_SCREEN_SIZE)
 
-    ##########################################################################
-    ####   Graphics                                                      #####
-    ##########################################################################
+    ###########################################################################
+    ####   Graphics                                                       #####
+    ###########################################################################
 
     map_sprite = pygame.image.load('map.bmp').convert()
 
@@ -86,13 +86,18 @@ def main():
 
     font = pygame.font.Font("pixeled.ttf", 12)
 
-    ##########################################################################
-    ####   Main loop                                                     #####
-    ##########################################################################
+    ###########################################################################
+    ####   Main loop                                                      #####
+    ###########################################################################
 
     while game_running:
         for event in pygame.event.get():
-            if event.type == pygame.QUIT:
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_LEFT:
+                    select_city(cities, -1)
+                elif event.key == pygame.K_RIGHT:
+                    select_city(cities, 1)
+            elif event.type == pygame.QUIT:
                 game_running = False
 
         screen.fill(BACKGROUND_COLOR)
@@ -109,11 +114,15 @@ def main():
 
         pygame.display.update()
 
-    ##########################################################################
-    ####   Teardown                                                      #####
-    ##########################################################################
+    ###########################################################################
+    ####   Teardown                                                       #####
+    ###########################################################################
 
     pygame.quit()
+
+###############################################################################
+####   Helper functions                                                   #####
+###############################################################################
 
 def get_city_data():
 
@@ -127,13 +136,25 @@ def get_city_data():
             city.is_selected = True
         cities.append(city)
 
+    cities.sort(key=lambda x: x.long)
+    
     return cities
+
+def select_city(cities, index):
+    for i, city in enumerate(cities):
+        if city.is_selected:
+            city.is_selected = False
+            try:
+                cities[i + index].is_selected = True
+            except IndexError:
+                cities[0].is_selected = True
+            return
 
 if __name__ == '__main__':
 
-    ##########################################################################
-    ####   Pygame setup                                                  #####
-    ##########################################################################
+    ###########################################################################
+    ####   Pygame setup                                                   #####
+    ###########################################################################
 
     global GAME_SCREEN_SIZE
     global BACKGROUND_COLOR
@@ -153,10 +174,9 @@ if __name__ == '__main__':
 
     DONE Fix light positions
     DONE Integrate light visibility with day/night
-    TODO Update is_selected on mouseover
     TODO Figure out refresh cycle
     DONE Figure out font
-    Populate info banner on click events
+    DONE Populate info textbox on keyboard events
     Migrate sun times requests from main.py
 
     '''
