@@ -84,8 +84,7 @@ def main():
 
     cities = get_city_data()
 
-    font = pygame.font.SysFont("consolas", 15)
-    text = font.render("Hello, World", True, (0, 0, 0))
+    font = pygame.font.Font("pixeled.ttf", 12)
 
     ##########################################################################
     ####   Main loop                                                     #####
@@ -105,7 +104,8 @@ def main():
             screen.blit(city.light, city.lxy)
             screen.blit(city.select, city.sxy)
 
-        screen.blit(text, (10, 296))
+            if city.is_selected:
+                screen.blit(font.render(city.name, True, (0, 0, 0)), (10, 283))
 
         pygame.display.update()
 
@@ -123,6 +123,8 @@ def get_city_data():
     cities = []
     for cdata in data['cities']:
         city = City(cdata)
+        if city.name == 'Dutch Harbor':
+            city.is_selected = True
         cities.append(city)
 
     return cities
