@@ -1,5 +1,6 @@
 import json, pygame, pytz
-from datetime import datetime, timedelta
+import update
+from datetime import date, datetime, timedelta
 
 class City():
     def __init__(self, data):
@@ -13,6 +14,8 @@ class City():
         self.lxy = tuple(data['lxy'])
         self.sunrise = datetime.strptime(data['sunrise'], '%Y-%m-%d %H:%M:%S%z')
         self.sunset = datetime.strptime(data['sunset'], '%Y-%m-%d %H:%M:%S%z')
+        self.str_sunrise = datetime.strftime(self.sunrise, '%H:%M:%S')
+        self.str_sunset = datetime.strftime(self.sunset, '%H:%M:%S')
 
         while self.sunrise.day < NOW.day:
             self.sunrise += timedelta(days=1)
@@ -112,7 +115,8 @@ def main():
             screen.blit(city.select, city.sxy)
 
             if city.is_selected:
-                screen.blit(font.render(city.name, True, (0, 0, 0)), (10, 283))
+                text = f'{city.name}: rise {city.str_sunrise}; set {city.str_sunset}'
+                screen.blit(font.render(text, True, (0, 0, 0)), (10, 283))
 
         pygame.display.update()
 
@@ -130,19 +134,25 @@ def get_city_data():
 
     with open('sun_times.json', 'r') as f:
         data = json.load(f)
+
+    try:
+        if datetime.strptime(data['timestamp'], '%Y-%m-%d').date() < date.today():
+            data = update.load_data() 
+    except TypeError:
+        data = update.load_data()
     
     cities = []
     for cdata in data['cities']:
         city = City(cdata)
-        if city.name == 'Dutch Harbor':
-            city.is_selected = True
         cities.append(city)
 
     cities.sort(key=lambda x: x.long)
+    cities[0].is_selected = True
     
     return cities
 
 def select_city(cities, index):
+
     for i, city in enumerate(cities):
         if city.is_selected:
             city.is_selected = False
@@ -174,11 +184,15 @@ if __name__ == '__main__':
     '''
     #TODO
 
+    TODO Scroll/mask text if too long for textbox
+    TODO Do live refresh
+    TODO Figure out refresh intervals
+    TODO Move backup_data into update.py
     DONE Fix light positions
     DONE Integrate light visibility with day/night
-    TODO Figure out refresh cycle
     DONE Figure out font
     DONE Populate info textbox on keyboard events
-    Migrate sun times requests from main.py
+    DONE Migrate sun times requests from main.py
+    DONE Display sunrise/sunset times in textbox
 
     '''
