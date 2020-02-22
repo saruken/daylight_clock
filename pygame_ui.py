@@ -188,6 +188,7 @@ if __name__ == '__main__':
     TODO Do live refresh
     TODO Figure out refresh intervals
     TODO Move backup_data into update.py
+    TODO Handle error / no response from sunrise-sunset.org
     DONE Fix light positions
     DONE Integrate light visibility with day/night
     DONE Figure out font
