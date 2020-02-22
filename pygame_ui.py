@@ -106,8 +106,8 @@ def main():
                 game_running = False
 
         screen.fill(BACKGROUND_COLOR)
-
         screen.blit(map_obj, (0, 0))
+        textbox = pygame.Surface((463, 16))
 
         for city in cities:
             city.update()
@@ -116,7 +116,9 @@ def main():
 
             if city.is_selected:
                 text = f'{city.name}: rise {city.str_sunrise}; set {city.str_sunset}'
-                screen.blit(font.render(text, True, (0, 0, 0)), (10, 283))
+                textbox.blit(font.render(text, True, (0, 0, 0)), (0, -12))
+
+        screen.blit(textbox, (8, 296))
 
         pygame.display.update()
 
@@ -147,7 +149,7 @@ def get_city_data():
         cities.append(city)
 
     cities.sort(key=lambda x: x.long)
-    cities[0].is_selected = True
+    cities[34].is_selected = True
     
     return cities
 
