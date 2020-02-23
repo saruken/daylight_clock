@@ -78,6 +78,8 @@ def main():
 
     pygame.key.set_repeat(350, 80)
 
+    clock = pygame.time.Clock()
+
     ###########################################################################
     ####   Graphics                                                       #####
     ###########################################################################
@@ -94,6 +96,7 @@ def main():
     textbox_max_width = 463
     textbox_default_x = 2
     text_current_posx = textbox_default_x
+    textbox_bg = (199, 145, 112)
 
     scroll_timer = pygame.USEREVENT + 1
     scroll_timer_status = 'off'
@@ -117,9 +120,13 @@ def main():
             elif event.type == pygame.QUIT:
                 game_running = False
 
+        # Set delta time to fix framerate @ 30 FPS (only used with text scroll)
+        dt = clock.tick(30)
+
         screen.fill(BACKGROUND_COLOR)
         screen.blit(map_obj, (0, 0))
         textbox = pygame.Surface((463, 16))
+        textbox.fill(textbox_bg)
 
         for city in cities:
             city.update()
@@ -128,7 +135,7 @@ def main():
 
             if city.is_selected:
                 text = f'{city.name}: rise {city.str_sunrise}; set {city.str_sunset}'
-                temp = font.render(text, True, (TRANSPARENT_COLOR))
+                temp = font.render(text, False, BACKGROUND_COLOR)
                 textbox.blit(temp, (text_current_posx, -12))
                 text_width = temp.get_size()[0]
 
@@ -138,7 +145,7 @@ def main():
                 scroll_timer_status = 'running'
             elif scroll_timer_status == 'finished':
                 if text_width + text_current_posx > textbox_max_width:
-                    text_current_posx -= scroll_speed
+                    text_current_posx -= scroll_speed * dt
         else:
             text_current_posx = textbox_default_x
 
@@ -209,8 +216,7 @@ if __name__ == '__main__':
 
     '''
     #TODO
-
-    TODO Scroll/mask text if too long for textbox
+    
     TODO Do live refresh
     TODO Figure out refresh intervals
     TODO Move backup_data into update.py
@@ -221,5 +227,6 @@ if __name__ == '__main__':
     DONE Populate info textbox on keyboard events
     DONE Migrate sun times requests from main.py
     DONE Display sunrise/sunset times in textbox
+    DONE Scroll/mask text if too long for textbox
 
     '''
