@@ -100,7 +100,7 @@ def main():
 
     scroll_timer = pygame.USEREVENT + 1
     scroll_timer_status = 'off'
-    scroll_speed = .1
+    scroll_speed = 1
 
     ###########################################################################
     ####   Main loop                                                      #####
@@ -135,7 +135,7 @@ def main():
 
             if city.is_selected:
                 text = f'{city.name}: rise {city.str_sunrise}; set {city.str_sunset}'
-                temp = font.render(text, False, BACKGROUND_COLOR)
+                temp = font.render(text, True, BACKGROUND_COLOR)
                 textbox.blit(temp, (text_current_posx, -12))
                 text_width = temp.get_size()[0]
 
@@ -145,7 +145,7 @@ def main():
                 scroll_timer_status = 'running'
             elif scroll_timer_status == 'finished':
                 if text_width + text_current_posx > textbox_max_width:
-                    text_current_posx -= scroll_speed * dt
+                    text_current_posx -= int(scroll_speed * dt / 10)
         else:
             text_current_posx = textbox_default_x
 
