@@ -84,19 +84,25 @@ def main():
     ####   Graphics                                                       #####
     ###########################################################################
 
-    map_sprite = pygame.image.load('map.bmp').convert()
-
-    map_obj = pygame.Surface(GAME_SCREEN_SIZE)
-    map_obj.blit(map_sprite, (0, 0))
-
-    cities = get_city_data()
-
     font = pygame.font.Font("pixeled.ttf", 12)
     text_width = 0
     textbox_max_width = 463
     textbox_default_x = 2
     text_current_posx = textbox_default_x
     textbox_bg = (199, 145, 112)
+
+    screen.fill(textbox_bg)
+    text = 'Loading sunrise/sunset times...'
+    temp = font.render(text, True, BACKGROUND_COLOR)
+    loading_text_x = GAME_SCREEN_SIZE[0] / 2 - temp.get_size()[0] / 2
+    loading_text_y = GAME_SCREEN_SIZE[1] / 2 - temp.get_size()[1] / 2
+    screen.blit(temp, (loading_text_x, loading_text_y))
+    pygame.display.update()
+    cities = get_city_data()
+
+    map_sprite = pygame.image.load('map.bmp').convert()
+    map_obj = pygame.Surface(GAME_SCREEN_SIZE)
+    map_obj.blit(map_sprite, (0, 0))
 
     scroll_timer = pygame.USEREVENT + 1
     scroll_timer_status = 'off'
@@ -221,7 +227,6 @@ if __name__ == '__main__':
     '''
     #TODO
 
-    Update UI while loading datetimes
     TODO Handle error / no response from sunrise-sunset.org
     DONE Fix light positions
     DONE Integrate light visibility with day/night
@@ -232,5 +237,6 @@ if __name__ == '__main__':
     DONE Scroll/mask text if too long for textbox
     DONE Do live refresh
     DONE Move backup_data into update.py
+    DONE Update UI while loading datetimes
 
     '''
