@@ -92,11 +92,12 @@ def main():
     font = pygame.font.Font("pixeled.ttf", 12)
     text_width = 0
     textbox_max_width = 463
-    text_current_posx = 0
+    textbox_default_x = 2
+    text_current_posx = textbox_default_x
 
     scroll_timer = pygame.USEREVENT + 1
-    scroll_enabled = False
-    scroll_timer_started = False
+    scroll_timer_status = 'off'
+    scroll_speed = .1
 
     ###########################################################################
     ####   Main loop                                                      #####
@@ -105,12 +106,14 @@ def main():
     while game_running:
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
+                scroll_timer_status = 'off'
                 if event.key == pygame.K_LEFT:
                     select_city(cities, -1)
                 elif event.key == pygame.K_RIGHT:
                     select_city(cities, 1)
             elif event.type == scroll_timer:
-                scroll_timer_started = False
+                if scroll_timer_status == 'running':
+                    scroll_timer_status = 'finished'
             elif event.type == pygame.QUIT:
                 game_running = False
 
@@ -125,28 +128,19 @@ def main():
 
             if city.is_selected:
                 text = f'{city.name}: rise {city.str_sunrise}; set {city.str_sunset}'
-                temp = font.render(text, True, (0, 0, 0))
+                temp = font.render(text, True, (TRANSPARENT_COLOR))
                 textbox.blit(temp, (text_current_posx, -12))
                 text_width = temp.get_size()[0]
 
         if text_width > textbox_max_width:
-            scroll_enabled = True
+            if scroll_timer_status == 'off':
+                pygame.time.set_timer(scroll_timer, 1000, True)
+                scroll_timer_status = 'running'
+            elif scroll_timer_status == 'finished':
+                if text_width + text_current_posx > textbox_max_width:
+                    text_current_posx -= scroll_speed
         else:
-            scroll_enabled = False
-
-        #TODO: FIX THIS
-        if scroll_enabled:
-            if text_current_posx == 0 and not scroll_timer_started:
-                pygame.time.set_timer(scroll_timer, 1000)
-                scroll_timer_started = True
-                elif not scroll_timer_started:
-                    text_current_posx -= 1
-            elif text_width + text_current_posx == textbox_max_width:
-                if not scroll_timer_started:
-                    pygame.time.set_timer(scroll_timer, 1000)
-                    scroll_timer_started = True
-                elif not scroll_timer_started:
-                    text_current_posx = 0
+            text_current_posx = textbox_default_x
 
         screen.blit(textbox, (8, 296))
 
