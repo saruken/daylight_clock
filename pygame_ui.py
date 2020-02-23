@@ -222,8 +222,7 @@ if __name__ == '__main__':
 
     '''
     #TODO
-    
-    TODO Move backup_data into update.py
+
     TODO Handle error / no response from sunrise-sunset.org
     DONE Fix light positions
     DONE Integrate light visibility with day/night
@@ -233,5 +232,6 @@ if __name__ == '__main__':
     DONE Display sunrise/sunset times in textbox
     DONE Scroll/mask text if too long for textbox
     DONE Do live refresh
+    DONE Move backup_data into update.py
 
     '''
