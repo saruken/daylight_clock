@@ -117,6 +117,8 @@ def main():
             elif event.type == scroll_timer:
                 if scroll_timer_status == 'running':
                     scroll_timer_status = 'finished'
+            elif event.type == update_timer:
+                update_lights(cities)
             elif event.type == pygame.QUIT:
                 game_running = False
 
@@ -141,7 +143,7 @@ def main():
 
         if text_width > textbox_max_width:
             if scroll_timer_status == 'off':
-                pygame.time.set_timer(scroll_timer, 1000, True)
+                pygame.time.set_timer(scroll_timer, 1000)
                 scroll_timer_status = 'running'
             elif scroll_timer_status == 'finished':
                 if text_width + text_current_posx > textbox_max_width:
@@ -195,6 +197,10 @@ def select_city(cities, index):
                 cities[0].is_selected = True
             return
 
+###############################################################################
+####   Ifmain block                                                       #####
+###############################################################################
+
 if __name__ == '__main__':
 
     ###########################################################################
@@ -217,8 +223,6 @@ if __name__ == '__main__':
     '''
     #TODO
     
-    TODO Do live refresh
-    TODO Figure out refresh intervals
     TODO Move backup_data into update.py
     TODO Handle error / no response from sunrise-sunset.org
     DONE Fix light positions
@@ -228,5 +232,6 @@ if __name__ == '__main__':
     DONE Migrate sun times requests from main.py
     DONE Display sunrise/sunset times in textbox
     DONE Scroll/mask text if too long for textbox
+    DONE Do live refresh
 
     '''
