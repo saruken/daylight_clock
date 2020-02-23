@@ -2,7 +2,7 @@
 
 I found this old GE clock in an antique store a couple years ago. It's about the size of a shoe box.
 
-![alt text](img/clock.png "GE clock")
+<img src="img/clock.png" alt="GE clock" width="800"/>
 
 Most of the thing is dedicated to a Mercator projection of the world, featuring prominent timezone demarcations and 50 little black dots designating cities and islands of interest to the clock-buying businessman of 1970 or so (including some charming anachronisms like "Peking" and "Leningrad").
 
@@ -12,4 +12,4 @@ This repo is a proof-of-concept in the form of a Pygame-powered pixel version of
 
 ### Try it out:
 
-`python3 pygame_ui.py`
+`python3 src\pygame_ui.py`
