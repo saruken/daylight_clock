@@ -117,8 +117,6 @@ def main():
             elif event.type == scroll_timer:
                 if scroll_timer_status == 'running':
                     scroll_timer_status = 'finished'
-            elif event.type == update_timer:
-                update_lights(cities)
             elif event.type == pygame.QUIT:
                 game_running = False
 
@@ -167,13 +165,13 @@ def main():
 
 def get_city_data():
 
-    with open('sun_times.json', 'r') as f:
-        data = json.load(f)
-
     try:
+        with open('sun_times.json', 'r') as f:
+            data = json.load(f)
+
         if datetime.strptime(data['timestamp'], '%Y-%m-%d').date() < date.today():
             data = update.load_data() 
-    except TypeError:
+    except (FileNotFoundError, TypeError):
         data = update.load_data()
     
     cities = []
@@ -223,6 +221,7 @@ if __name__ == '__main__':
     '''
     #TODO
 
+    Update UI while loading datetimes
     TODO Handle error / no response from sunrise-sunset.org
     DONE Fix light positions
     DONE Integrate light visibility with day/night
