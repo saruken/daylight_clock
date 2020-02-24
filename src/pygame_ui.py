@@ -1,6 +1,7 @@
 import json, pygame, pytz
 import update
 from datetime import date, datetime, timedelta
+from pathlib import Path
 
 class City():
     def __init__(self, data):
@@ -25,15 +26,17 @@ class City():
         self.is_day = False
         self.is_selected = False
 
+        filepath = str(Path.cwd().parent / 'img' / 'light.bmp')
         self.light = pygame.Surface((8, 8))
         self.light.set_colorkey(TRANSPARENT_COLOR)
-        light_sprite = pygame.image.load('light.bmp').convert()
+        light_sprite = pygame.image.load(filepath).convert()
         self.light.blit(light_sprite, (0, 0))
 
+        filepath = str(Path.cwd().parent / 'img' / 'select.bmp')
         self.select = pygame.Surface((20, 20))
         self.sxy = tuple([x - 6 for x in data['lxy']])
         self.select.set_colorkey(TRANSPARENT_COLOR)
-        select_sprite = pygame.image.load('select.bmp').convert()
+        select_sprite = pygame.image.load(filepath).convert()
         self.select.blit(select_sprite, (0, 0))
 
     def check_sun(self):
@@ -84,7 +87,7 @@ def main():
     ####   Graphics                                                       #####
     ###########################################################################
 
-    font = pygame.font.Font("pixeled.ttf", 12)
+    font = pygame.font.Font('pixeled.ttf', 12)
     text_width = 0
     textbox_max_width = 463
     textbox_default_x = 2
@@ -100,7 +103,8 @@ def main():
     pygame.display.update()
     cities = get_city_data()
 
-    map_sprite = pygame.image.load('map.bmp').convert()
+    filepath = str(Path.cwd().parent / 'img' / 'map.bmp')
+    map_sprite = pygame.image.load(filepath).convert()
     map_obj = pygame.Surface(GAME_SCREEN_SIZE)
     map_obj.blit(map_sprite, (0, 0))
 
@@ -171,8 +175,10 @@ def main():
 
 def get_city_data():
 
+    filepath = Path.cwd() / 'sun_times.json'
+
     try:
-        with open('sun_times.json', 'r') as f:
+        with open(filepath, 'r') as f:
             data = json.load(f)
 
         if datetime.strptime(data['timestamp'], '%Y-%m-%d').date() < date.today():

@@ -1,5 +1,4 @@
 import json, os, pytz, requests
-import backup_data
 from datetime import date, datetime, timedelta
 
 def generate_city_info():
