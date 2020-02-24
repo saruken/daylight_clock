@@ -1,5 +1,6 @@
 import json, os, pytz, requests
 from datetime import date, datetime, timedelta
+from pathlib import Path
 
 def generate_city_info():
     return [
@@ -309,8 +310,8 @@ def load_data():
 
     tzlocal = pytz.timezone('US/Eastern')
     tzutc = pytz.timezone('UTC')
-    
-    file_name = 'sun_times.json'
+
+    file_name = Path.cwd() / 'sun_times.json'
     data = read_data(file_name)
 
     if data:
