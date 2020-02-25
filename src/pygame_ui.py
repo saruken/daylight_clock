@@ -1,4 +1,4 @@
-import json, pygame, pytz
+import json, os, pygame, pytz
 import update
 from datetime import date, datetime, timedelta
 from pathlib import Path
@@ -8,6 +8,7 @@ class City():
         global NOW
         global TZLOCAL
         global TZUTC
+        global DIR_MAIN
 
         self.name = data['name']
         self.lat = data['lat']
@@ -26,13 +27,13 @@ class City():
         self.is_day = False
         self.is_selected = False
 
-        filepath = str(Path.cwd().parent / 'img' / 'light.bmp')
+        filepath = str(DIR_MAIN / 'img' / 'light.bmp')
         self.light = pygame.Surface((8, 8))
         self.light.set_colorkey(TRANSPARENT_COLOR)
         light_sprite = pygame.image.load(filepath).convert()
         self.light.blit(light_sprite, (0, 0))
 
-        filepath = str(Path.cwd().parent / 'img' / 'select.bmp')
+        filepath = str(DIR_MAIN / 'img' / 'select.bmp')
         self.select = pygame.Surface((20, 20))
         self.sxy = tuple([x - 6 for x in data['lxy']])
         self.select.set_colorkey(TRANSPARENT_COLOR)
@@ -87,7 +88,8 @@ def main():
     ####   Graphics                                                       #####
     ###########################################################################
 
-    font = pygame.font.Font('pixeled.ttf', 12)
+    filepath = str(DIR_MAIN / 'src' / 'pixeled.ttf')
+    font = pygame.font.Font(filepath, 12)
     text_width = 0
     textbox_max_width = 463
     textbox_default_x = 2
@@ -103,7 +105,7 @@ def main():
     pygame.display.update()
     cities = get_city_data()
 
-    filepath = str(Path.cwd().parent / 'img' / 'map.bmp')
+    filepath = str(DIR_MAIN / 'img' / 'map.bmp')
     map_sprite = pygame.image.load(filepath).convert()
     map_obj = pygame.Surface(GAME_SCREEN_SIZE)
     map_obj.blit(map_sprite, (0, 0))
@@ -175,7 +177,9 @@ def main():
 
 def get_city_data():
 
-    filepath = Path.cwd() / 'sun_times.json'
+    global DIR_MAIN
+
+    filepath = DIR_MAIN / 'src' / 'sun_times.json'
 
     try:
         with open(filepath, 'r') as f:
@@ -220,10 +224,12 @@ if __name__ == '__main__':
     global GAME_SCREEN_SIZE
     global BACKGROUND_COLOR
     global TRANSPARENT_COLOR
+    global DIR_MAIN
 
     GAME_SCREEN_SIZE = (480, 320)
     BACKGROUND_COLOR = (0, 0, 0)
     TRANSPARENT_COLOR = (255, 0, 255)
+    DIR_MAIN = Path(os.path.dirname(os.path.realpath(__file__))).parent
 
     pygame.init()
     pygame.display.set_caption('Daylight Clock')
