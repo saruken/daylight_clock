@@ -1,4 +1,4 @@
-import json, os, pytz, requests
+import json, pytz, requests
 from datetime import date, datetime, timedelta
 from pathlib import Path
 
@@ -306,13 +306,12 @@ def generate_city_info():
         }
     ]
 
-def load_data():
+def load_data(filepath):
 
     tzlocal = pytz.timezone('US/Eastern')
     tzutc = pytz.timezone('UTC')
-    DIR_MAIN = Path(os.path.dirname(os.path.realpath(__file__))).parent
 
-    file_name = DIR_MAIN / 'src' / 'sun_times.json'
+    file_name = filepath / 'src' / 'sun_times.json'
     data = read_data(file_name)
 
     if data:

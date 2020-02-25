@@ -186,9 +186,9 @@ def get_city_data():
             data = json.load(f)
 
         if datetime.strptime(data['timestamp'], '%Y-%m-%d').date() < date.today():
-            data = update.load_data() 
+            data = update.load_data(DIR_MAIN) 
     except (FileNotFoundError, TypeError):
-        data = update.load_data()
+        data = update.load_data(DIR_MAIN)
     
     cities = []
     for cdata in data['cities']:
