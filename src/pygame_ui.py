@@ -114,6 +114,8 @@ def main():
     scroll_timer_status = 'off'
     scroll_speed = 1
 
+    second_counter = 0
+
     ###########################################################################
     ####   Main loop                                                      #####
     ###########################################################################
@@ -135,12 +137,15 @@ def main():
         # Set delta time to fix framerate @ 30 FPS (only used with text scroll)
         dt = clock.tick(30)
 
+        second_counter += dt
+        if second_counter > 1000:
+            NOW = datetime.utcnow().replace(tzinfo=TZUTC).astimezone(TZLOCAL)
+            second_counter = 0
+
         screen.fill(BACKGROUND_COLOR)
         screen.blit(map_obj, (0, 0))
         textbox = pygame.Surface((463, 16))
         textbox.fill(textbox_bg)
-
-        NOW = datetime.utcnow().replace(tzinfo=TZUTC).astimezone(TZLOCAL)
 
         for city in cities:
             city.update()
@@ -148,8 +153,7 @@ def main():
             screen.blit(city.select, city.sxy)
 
             if city.is_selected:
-                #text = f'{city.name}: rise {city.str_sunrise}; set {city.str_sunset}'
-                text = f'{city.name}: is_day {city.is_day}; alpha {city.light.get_alpha()}'
+                text = f'{city.name}: rise {city.str_sunrise}; set {city.str_sunset}'
                 temp = font.render(text, True, BACKGROUND_COLOR)
                 textbox.blit(temp, (text_current_posx, -12))
                 text_width = temp.get_size()[0]
