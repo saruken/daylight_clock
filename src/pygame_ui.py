@@ -140,13 +140,16 @@ def main():
         textbox = pygame.Surface((463, 16))
         textbox.fill(textbox_bg)
 
+        NOW = datetime.utcnow().replace(tzinfo=TZUTC).astimezone(TZLOCAL)
+
         for city in cities:
             city.update()
             screen.blit(city.light, city.lxy)
             screen.blit(city.select, city.sxy)
 
             if city.is_selected:
-                text = f'{city.name}: rise {city.str_sunrise}; set {city.str_sunset}'
+                #text = f'{city.name}: rise {city.str_sunrise}; set {city.str_sunset}'
+                text = f'{city.name}: is_day {city.is_day}; alpha {city.light.get_alpha()}'
                 temp = font.render(text, True, BACKGROUND_COLOR)
                 textbox.blit(temp, (text_current_posx, -12))
                 text_width = temp.get_size()[0]
